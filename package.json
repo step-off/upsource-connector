@@ -1,0 +1,24 @@
+{
+  "name": "xcom-reviews-service",
+  "version": "1.0.0",
+  "description": "",
+  "git": "https://github.com/step-off/xcom-reviews-service.git",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "prettify": "prettier --write src/**/*.js"
+  },
+  "author": "step-off",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "mongodb": "^3.5.4",
+    "mongoose": "^5.9.4"
+  },
+  "devDependencies": {
+    "jest": "^25.3.0",
+    "nodemon": "^2.0.2",
+    "prettier": "^2.0.2"
+  }
+}
