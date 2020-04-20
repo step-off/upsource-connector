@@ -1,11 +1,20 @@
+const ReviewsService = require('./ReviewsService');
+
 class MessageService {
   /**
-   * @param reviews: ReviewDTO[]
+   * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
-  buildNewReviewsMsg(reviews) {
-    // TODO: implement
-    return [];
+  buildNewReviewsMsg({ reviews, users }) {
+    return reviews.map((review) => {
+      const reviewersUserIds = ReviewsService.getReviewersUserIds(review);
+      const reviewUrl = ReviewsService.getReviewUrl(review);
+      const telegramUsersToNotify = users
+        .filter((i) => reviewersUserIds.includes(i.userId))
+        .map((i) => i.telegramUsername);
+
+      return `${telegramUsersToNotify.join(', ')} новое ревью для вас: ${reviewUrl}`;
+    });
   }
 
   /**

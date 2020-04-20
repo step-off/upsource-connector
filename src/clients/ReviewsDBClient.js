@@ -31,6 +31,7 @@ class ReviewsDBClient {
     try {
       await this._connect();
     } catch (e) {
+      console.error(`Unable to connect to database:`, e);
       return [];
     }
     const db = this.client.db(this.dbName);

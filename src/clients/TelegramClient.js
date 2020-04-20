@@ -3,11 +3,19 @@ class TelegramClient {
     this.botId = '';
   }
 
-  sendMessage(message) {
+  async sendMessage(message) {
     // TODO: implement
     if (message) {
       console.log(message);
     }
+  }
+
+  /**
+   *
+   * @param messages: string[]
+   */
+  async sendBunchOfMessages(messages) {
+    await Promise.all(messages.map(this.sendMessage));
   }
 }
 
