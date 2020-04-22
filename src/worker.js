@@ -4,7 +4,7 @@ const TelegramClient = require('./clients/TelegramClient');
 const ReviewsService = require('./services/ReviewsService');
 const MessageService = require('./services/MessageService');
 
-const ONE_MINUTE_INTERVAL = 1000 * 60;
+const WORK_INTERVAL = 1000 * 60; // One minute
 let isWorkerRunning = false;
 
 module.exports = async function () {
@@ -32,8 +32,8 @@ module.exports = async function () {
     await ReviewsDBClient.removeObsoleteReviews(obsoleteReviews);
 
     const newReviewsMessages = MessageService.buildNewReviewsMsg({ reviews: newOpenedReviews, users });
-    TelegramClient.sendBunchOfMessages(newReviewsMessages);
+    await TelegramClient.sendMessages(newReviewsMessages);
 
     isWorkerRunning = false;
-  }, ONE_MINUTE_INTERVAL);
+  }, WORK_INTERVAL);
 };
