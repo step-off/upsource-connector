@@ -12,8 +12,9 @@ class MessageService {
       const telegramUsersToNotify = users
         .filter((i) => reviewersUserIds.includes(i.userId))
         .map((i) => i.telegramUsername);
+      const isSingleReviewer = telegramUsersToNotify.length === 1;
 
-      return `${telegramUsersToNotify.join(', ')} новое ревью для вас: ${reviewUrl}`;
+      return `${telegramUsersToNotify.join(', ')} новое ревью для ${isSingleReviewer ? 'тебя' : 'вас'}: ${reviewUrl}`;
     });
   }
 
