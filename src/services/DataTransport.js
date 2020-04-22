@@ -17,7 +17,7 @@ class DataTransport {
     try {
       axiosResult = await axios.post(url, data, config);
     } catch (e) {
-      console.error(`Error with POST request. Url: ${url}. Data: ${data}. Error: ${e}`);
+      console.error(`Error with POST request. Url: ${url}. Data: ${JSON.stringify(data)}. Error: ${e}`);
       return null;
     }
     return axiosResult.data;
