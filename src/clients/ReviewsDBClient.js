@@ -60,7 +60,8 @@ class ReviewsDBClient {
 
     const db = this.client.db(this.dbName);
     const notifyChatsCollection = db.collection(this._notifyChatsCollectionName);
-    return notifyChatsCollection.find({}).toArray();
+    const chats = await notifyChatsCollection.find({}).toArray();
+    return chats.filter((i) => !i.is_obsolete_for_review);
   }
 
   async insertNewChatsToNotify(chats) {
@@ -143,7 +144,9 @@ class ReviewsDBClient {
   }
 
   _close() {
-    this.client.close(true);
+    if (this.client) {
+      this.client.close(true);
+    }
   }
 }
 
