@@ -32,6 +32,13 @@ class ReviewsService {
     return review.participants.filter((i) => i.role === RoleInReviewEnum.Reviewer).map((i) => i.userId);
   }
 
+  getReviewAuthorUserId(review) {
+    const author = review.participants.find((i) => i.role === RoleInReviewEnum.Author);
+    if (author) {
+      return author.userId;
+    }
+  }
+
   getReviewUrl(review) {
     return [this.upsourceHostUrl, this.projectName, this.reviewEndpoint, review.reviewId.reviewId].join('/');
   }
