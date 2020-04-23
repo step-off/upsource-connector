@@ -3,12 +3,15 @@ const ReviewsDBClient = require('./clients/ReviewsDBClient');
 const TelegramClient = require('./clients/TelegramClient');
 const ReviewsService = require('./services/ReviewsService');
 const MessageService = require('./services/MessageService');
+const ReviewTaskScheduler = require('./services/ReviewTaskScheduler');
 
 const WORK_INTERVAL = 1000 * 60; // One minute
 let isWorkerRunning = false;
 
 module.exports = async function () {
-  // TODO: set repeated task to check outdated reviews
+  ReviewTaskScheduler.scheduleOutdatedReviewsCheck();
+
+  // TODO: Use scheduler instead of setInterval
   setInterval(async () => {
     if (!isWorkerRunning) {
       isWorkerRunning = true;
