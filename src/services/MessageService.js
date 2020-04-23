@@ -19,12 +19,24 @@ class MessageService {
   }
 
   /**
-   * @param reviews: ReviewDTO[]
+   * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
-  buildOutdatedReviewsMsg(reviews) {
-    // TODO: implement
-    return [];
+  buildOutdatedReviewsMsg({ reviews, users }) {
+    return reviews
+      .map((review) => {
+        const authorUserId = ReviewsService.getReviewAuthorUserId(review);
+        const reviewUrl = ReviewsService.getReviewUrl(review);
+        const userToNotify = users.find((i) => i.userId === authorUserId);
+
+        if (!userToNotify || !userToNotify.telegramUsername) {
+          return null;
+        }
+        const telegramUserToNotify = userToNotify.telegramUsername;
+
+        return `${telegramUserToNotify}, твое ревью протухло: ${reviewUrl}`;
+      })
+      .filter(Boolean);
   }
 }
 
