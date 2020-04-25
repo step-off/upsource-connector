@@ -1,5 +1,6 @@
 const ReviewsDBClient = require('./ReviewsDBClient');
 const DataTransport = require('../services/DataTransport');
+const Logger = require('../services/Logger');
 
 class TelegramClient {
   constructor() {
@@ -49,7 +50,7 @@ class TelegramClient {
       const response = await DataTransport.get(getUpdatesUrl);
       return response.result;
     } catch (e) {
-      console.error(`Error with getting bot updates: `, e);
+      Logger.error(`Error with getting bot updates: `, e);
     }
   }
 
@@ -71,7 +72,6 @@ class TelegramClient {
 
   async _processMessageSend(message, chatId) {
     const sendMessageUrl = [this.apiBaseUrl, this.sendMessageMethodName].join('/');
-    const queryParams = [`chat_id=${chatId}`, `text=${message}`].join('&');
     const sendMessageUrlWithParams = `${sendMessageUrl}`;
 
     try {
@@ -88,7 +88,7 @@ class TelegramClient {
         }
       );
     } catch (e) {
-      console.log(`Error with sending message: ${message}, chatId: ${chatId}. Error: `, e);
+      Logger.error(`Error with sending message: ${message}, chatId: ${chatId}. Error: `, e);
     }
   }
 }

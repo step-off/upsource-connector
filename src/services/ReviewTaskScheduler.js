@@ -4,6 +4,7 @@ const ReviewsDBClient = require('../clients/ReviewsDBClient');
 const ReviewsService = require('./ReviewsService');
 const MessageService = require('./MessageService');
 const Scheduler = require('./Scheduler');
+const Logger = require('./Logger');
 
 class ReviewTaskScheduler {
   constructor() {
@@ -13,6 +14,7 @@ class ReviewTaskScheduler {
   }
 
   scheduleOutdatedReviewsCheck() {
+    Logger.log('is about to schedule outdated reviews task');
     // NOTE: Schedules task to run every working day at 5AM GMT.
     Scheduler.scheduleJob({
       cronTime: '0 5 * * 0-7', // TODO: change days interval after testing
@@ -21,6 +23,7 @@ class ReviewTaskScheduler {
   }
 
   scheduleOpenedReviewsCheck() {
+    Logger.log('is about to schedule opened reviews task');
     // NOTE: Schedules task to run every 3 minutes at working day.
     Scheduler.scheduleJob({
       cronTime: '*/3 * * * 0-7', // TODO: change days interval after testing
@@ -29,7 +32,7 @@ class ReviewTaskScheduler {
   }
 
   async _checkOpenedReviews() {
-    console.log(`is checking opened reviews...`);
+    Logger.log('start opened reviews check');
     const openedReviewsFromAPI = await UpsourceClient.getOpenedReviews();
     const openedReviewsFromDb = await ReviewsDBClient.getOpenedReviews();
     const users = await ReviewsDBClient.getReviewsUsers();
@@ -50,7 +53,7 @@ class ReviewTaskScheduler {
   }
 
   async _checkOutdatedReviews() {
-    console.log(`is checking outdated reviews...`);
+    Logger.log('start outdated reviews check');
     const openedReviews = await UpsourceClient.getOpenedReviews();
     const users = await ReviewsDBClient.getReviewsUsers();
     const outdatedReviews = ReviewsService.getOutdatedReviews(openedReviews);
@@ -60,6 +63,9 @@ class ReviewTaskScheduler {
   }
 
   _notifyAboutOutdatedReviews(reviews, users) {
+    Logger.log('is about to notify about outdated reviews: ');
+    Logger.log(JSON.stringify(reviews));
+
     const messages = MessageService.buildOutdatedReviewsMsg({ reviews, users });
     TelegramClient.sendMessages(messages);
   }

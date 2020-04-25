@@ -1,9 +1,10 @@
 const CronJob = require('cron').CronJob;
+const Logger = require('./Logger');
 
 class Scheduler {
   scheduleJob({ cronTime, onTick }) {
     if (!cronTime || !onTick) {
-      console.error('cronTime & onTick are required to schedule a job!');
+      Logger.error('cronTime & onTick are required to schedule a job!');
     }
 
     return new CronJob({

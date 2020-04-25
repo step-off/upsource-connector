@@ -1,4 +1,5 @@
 const MongoClient = require('mongodb').MongoClient;
+const Logger = require('../services/Logger');
 
 class ReviewsDBClient {
   constructor() {
@@ -23,7 +24,7 @@ class ReviewsDBClient {
       await this._connectionPromise;
     }
     if (!this._isConnected) {
-      console.error(`Try to get opened reviews while there is no connection`);
+      Logger.error(`Try to get opened reviews while there is no connection`);
       return [];
     }
     const db = this.client.db(this.dbName);
@@ -39,7 +40,7 @@ class ReviewsDBClient {
       await this._connectionPromise;
     }
     if (!this._isConnected) {
-      console.error(`Try to get reviews users while there is no connection`);
+      Logger.error(`Try to get reviews users while there is no connection`);
       return [];
     }
 
@@ -54,7 +55,7 @@ class ReviewsDBClient {
       await this._connectionPromise;
     }
     if (!this._isConnected) {
-      console.error(`Try to get chats while there is no connection`);
+      Logger.error(`Try to get chats while there is no connection`);
       return [];
     }
 
@@ -79,7 +80,7 @@ class ReviewsDBClient {
       try {
         await chatsCollection.insertMany(newChats);
       } catch (e) {
-        console.error(`Unable to insert reviews: ${newChats}`, e);
+        Logger.error(`Unable to insert reviews: ${newChats}`, e);
       }
     }
   }
@@ -89,7 +90,7 @@ class ReviewsDBClient {
       return;
     }
     if (!this._isConnected) {
-      console.error('Trying to remove obsolete reviews while connection is closed.');
+      Logger.error('Trying to remove obsolete reviews while connection is closed.');
     }
 
     const db = this.client.db(this.dbName);
@@ -97,7 +98,7 @@ class ReviewsDBClient {
     try {
       await reviewsCollection.deleteMany({ _id: { $in: reviews.map((i) => i._id) } });
     } catch (e) {
-      console.error(`Unable to remove reviews: ${reviews}`, e);
+      Logger.error(`Unable to remove reviews: ${reviews}`, e);
     }
   }
 
@@ -106,7 +107,7 @@ class ReviewsDBClient {
       return;
     }
     if (!this._isConnected) {
-      console.error('Try to insert reviews while connection is closed.');
+      Logger.error(`Unable to remove reviews: ${reviews}`);
     }
     const db = this.client.db(this.dbName);
     const reviewsCollection = db.collection(this._openedReviewsCollectionName);
@@ -114,7 +115,7 @@ class ReviewsDBClient {
     try {
       await reviewsCollection.insertMany(reviews);
     } catch (e) {
-      console.error(`Unable to insert reviews: ${reviews}`, e);
+      Logger.error(`Unable to insert reviews: ${reviews}`);
     }
   }
 
@@ -123,16 +124,15 @@ class ReviewsDBClient {
       return;
     }
     try {
-      console.log(`Connecting to database...`);
+      Logger.log(`Connecting to database...`);
 
       this._connectionPromise = this.client.connect();
       await this._connectionPromise;
       this._isConnected = true;
 
-      console.log(`Connected to database successfully!`);
+      Logger.log(`Connected to database successfully!`);
     } catch (e) {
-      console.log(`Could not to connect to database`);
-      console.log(e);
+      Logger.error(`Could not to connect to database: `, e);
     } finally {
       this._connectionPromise = null;
     }

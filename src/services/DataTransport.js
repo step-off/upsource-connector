@@ -1,4 +1,5 @@
 const axios = require('axios');
+const Logger = require('./Logger');
 
 class DataTransport {
   static async get(url, config) {
@@ -6,7 +7,7 @@ class DataTransport {
     try {
       axiosResult = await axios.get(url, config);
     } catch (e) {
-      console.error(`Error with GET request. Url: ${url}. Error: ${e}`);
+      Logger.error(`Error with GET request. Url: ${url}. Error: ${e}`);
       return null;
     }
     return axiosResult.data;
@@ -17,7 +18,7 @@ class DataTransport {
     try {
       axiosResult = await axios.post(url, data, config);
     } catch (e) {
-      console.error(`Error with POST request. Url: ${url}. Data: ${JSON.stringify(data)}. Error: ${e}`);
+      Logger.error(`Error with POST request. Url: ${url}. Data: ${JSON.stringify(data)}. Error: ${e}`);
       return null;
     }
     return axiosResult.data;
