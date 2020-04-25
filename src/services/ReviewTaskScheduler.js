@@ -29,6 +29,7 @@ class ReviewTaskScheduler {
   }
 
   async _checkOpenedReviews() {
+    console.log(`is checking opened reviews...`);
     const openedReviewsFromAPI = await UpsourceClient.getOpenedReviews();
     const openedReviewsFromDb = await ReviewsDBClient.getOpenedReviews();
     const users = await ReviewsDBClient.getReviewsUsers();
@@ -49,6 +50,7 @@ class ReviewTaskScheduler {
   }
 
   async _checkOutdatedReviews() {
+    console.log(`is checking outdated reviews...`);
     const openedReviews = await UpsourceClient.getOpenedReviews();
     const users = await ReviewsDBClient.getReviewsUsers();
     const outdatedReviews = ReviewsService.getOutdatedReviews(openedReviews);
