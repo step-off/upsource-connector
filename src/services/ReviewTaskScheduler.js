@@ -17,7 +17,7 @@ class ReviewTaskScheduler {
     Logger.log('is about to schedule outdated reviews task');
     // NOTE: Schedules task to run every working day at 5AM GMT.
     Scheduler.scheduleJob({
-      cronTime: '0 5 * * 0-7', // TODO: change days interval after testing
+      cronTime: '0 5 * * 0-6', // TODO: change days interval after testing
       onTick: this._checkOutdatedReviews,
     });
   }
@@ -26,7 +26,7 @@ class ReviewTaskScheduler {
     Logger.log('is about to schedule opened reviews task');
     // NOTE: Schedules task to run every 3 minutes at working day.
     Scheduler.scheduleJob({
-      cronTime: '*/3 * * * 0-7', // TODO: change days interval after testing
+      cronTime: '*/3 * * * 0-6', // TODO: change days interval after testing
       onTick: this._checkOpenedReviews,
     });
   }
