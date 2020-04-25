@@ -7,12 +7,16 @@ class Scheduler {
       Logger.error('cronTime & onTick are required to schedule a job!');
     }
 
-    return new CronJob({
-      start: true,
-      timeZone: 'Etc/GMT',
-      cronTime,
-      onTick,
-    });
+    try {
+      new CronJob({
+        start: true,
+        timeZone: 'Etc/GMT',
+        cronTime,
+        onTick,
+      });
+    } catch (e) {
+      Logger.error(`Error with CronJob scheduling: `, e);
+    }
   }
 }
 
