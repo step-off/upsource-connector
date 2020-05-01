@@ -9,12 +9,13 @@ class MessageService {
     return reviews.map((review) => {
       const reviewersUserIds = ReviewsService.getReviewersUserIds(review);
       const reviewUrl = ReviewsService.getReviewUrl(review);
-      const telegramUsersToNotify = users
-        .filter((i) => reviewersUserIds.includes(i.userId))
-        .map((i) => i.telegramUsername);
-      const isSingleReviewer = telegramUsersToNotify.length === 1;
+      const reviewersToNotify = users.filter((i) => reviewersUserIds.includes(i.userId)).map((i) => i.telegramUsername);
+      const hasReviewers = reviewersToNotify.length > 0;
+      const isSingleReviewer = reviewersToNotify.length === 1;
 
-      return `${telegramUsersToNotify.join(', ')} новое ревью для ${isSingleReviewer ? 'тебя' : 'вас'}: ${reviewUrl}`;
+      return hasReviewers
+        ? `${reviewersToNotify.join(', ')} для ${isSingleReviewer ? 'тебя' : 'вас'} новое ревью: ${reviewUrl}`
+        : '';
     });
   }
 
