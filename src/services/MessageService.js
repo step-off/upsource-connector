@@ -35,7 +35,7 @@ class MessageService {
         }
         const telegramUserToNotify = userToNotify.telegramUsername;
 
-        return `${telegramUserToNotify}, твое ревью протухло: ${reviewUrl}`;
+        return `${telegramUserToNotify}, твое ревью протухает: ${reviewUrl}`;
       })
       .filter(Boolean);
   }
