@@ -1,8 +1,4 @@
-const RoleInReviewEnum = {
-  Author: 1,
-  Reviewer: 2,
-  Watcher: 3,
-};
+const RoleInReviewEnum = require("./constants").RoleInReviewEnum;
 
 /**
  * Works with reviews DTOs. To see review DTO description, check out:
@@ -32,11 +28,8 @@ class ReviewsService {
     return review.participants.filter((i) => i.role === RoleInReviewEnum.Reviewer).map((i) => i.userId);
   }
 
-  getReviewAuthorUserId(review) {
-    const author = review.participants.find((i) => i.role === RoleInReviewEnum.Author);
-    if (author) {
-      return author.userId;
-    }
+  getReviewAuthorsUserIds(review) {
+    return review.participants.filter((i) => i.role === RoleInReviewEnum.Author).map((i) => i.userId);
   }
 
   getReviewUrl(review) {
