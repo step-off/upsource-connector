@@ -5,8 +5,7 @@ class MessageService {
    * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
-  // TODO: rename
-  buildNewReviewsMsg({ reviews, users }) {
+  buildNewReviewsMessages({ reviews, users }) {
     return reviews.map((review) => {
       const reviewersUserIds = ReviewsService.getReviewersUserIds(review);
       const reviewUrl = ReviewsService.getReviewUrl(review);
@@ -27,8 +26,7 @@ class MessageService {
    * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
-  // TODO: rename
-  buildOutdatedReviewsMsg({ reviews, users }) {
+  buildOutdatedReviewsMessages({ reviews, users }) {
     return reviews.map((review) => {
       const authorUserIds = ReviewsService.getReviewAuthorsUserIds(review);
       const reviewUrl = ReviewsService.getReviewUrl(review);

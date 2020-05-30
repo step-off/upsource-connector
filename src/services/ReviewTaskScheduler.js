@@ -46,7 +46,7 @@ class ReviewTaskScheduler {
     await ReviewsDBClient.insertNewOpenedReviews(newOpenedReviews);
     await ReviewsDBClient.removeObsoleteReviews(obsoleteReviews);
 
-    const newReviewsMessages = MessageService.buildNewReviewsMsg({ reviews: newOpenedReviews, users });
+    const newReviewsMessages = MessageService.buildNewReviewsMessages({ reviews: newOpenedReviews, users });
     await TelegramClient.sendMessages(newReviewsMessages);
   }
 
@@ -64,7 +64,7 @@ class ReviewTaskScheduler {
     Logger.log('is about to notify about outdated reviews: ');
     Logger.log(JSON.stringify(reviews));
 
-    const messages = MessageService.buildOutdatedReviewsMsg({ reviews, users });
+    const messages = MessageService.buildOutdatedReviewsMessages({ reviews, users });
     TelegramClient.sendMessages(messages);
   }
 }

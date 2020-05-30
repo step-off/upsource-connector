@@ -13,7 +13,7 @@ const testUsers = [testUser1, testUser2];
 describe('MessageService', () => {
   test('should build correct message about new review for single reviewer', () => {
     const expectedMessages = [`${testUser1.telegramUsername}, для тебя новое ревью: ${testReviewUrl}`];
-    const actualMessages = MessageService.buildNewReviewsMsg({
+    const actualMessages = MessageService.buildNewReviewsMessages({
       reviews: [testReviewWithSingleReviewer],
       users: testUsers,
     });
@@ -25,7 +25,7 @@ describe('MessageService', () => {
     const expectedMessages = [
       `${testUser1.telegramUsername}, ${testUser2.telegramUsername}, для вас новое ревью: ${testReviewUrl}`,
     ];
-    const actualMessages = MessageService.buildNewReviewsMsg({
+    const actualMessages = MessageService.buildNewReviewsMessages({
       reviews: [testReviewWithMultipleReviewers],
       users: testUsers,
     });
@@ -35,7 +35,7 @@ describe('MessageService', () => {
 
   test('should build empty message about new review without reviewers', () => {
     const expectedMessages = [''];
-    const actualMessages = MessageService.buildNewReviewsMsg({
+    const actualMessages = MessageService.buildNewReviewsMessages({
       reviews: [testReviewWithoutParticipants],
       users: testUsers,
     });
@@ -45,7 +45,7 @@ describe('MessageService', () => {
 
   test('should build correct message about outdated review for single author', () => {
     const expectedMessages = [`${testUser1.telegramUsername}, твое ревью протухает: ${testReviewUrl}`];
-    const actualMessages = MessageService.buildOutdatedReviewsMsg({
+    const actualMessages = MessageService.buildOutdatedReviewsMessages({
       reviews: [testReviewWithSingleAuthor],
       users: testUsers,
     });
@@ -57,7 +57,7 @@ describe('MessageService', () => {
     const expectedMessages = [
       `${testUser1.telegramUsername}, ${testUser2.telegramUsername}, ваше ревью протухает: ${testReviewUrl}`,
     ];
-    const actualMessages = MessageService.buildOutdatedReviewsMsg({
+    const actualMessages = MessageService.buildOutdatedReviewsMessages({
       reviews: [testReviewWithMultipleAuthors],
       users: testUsers,
     });
@@ -67,7 +67,7 @@ describe('MessageService', () => {
 
   test('should build empty message about outdated review without authors', () => {
     const expectedMessages = [''];
-    const actualMessages = MessageService.buildOutdatedReviewsMsg({
+    const actualMessages = MessageService.buildOutdatedReviewsMessages({
       reviews: [testReviewWithoutParticipants],
       users: testUsers,
     });
