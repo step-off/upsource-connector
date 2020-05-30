@@ -5,16 +5,20 @@ class MessageService {
    * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
+  // TODO: rename
   buildNewReviewsMsg({ reviews, users }) {
     return reviews.map((review) => {
       const reviewersUserIds = ReviewsService.getReviewersUserIds(review);
       const reviewUrl = ReviewsService.getReviewUrl(review);
-      const reviewersToNotify = users.filter((i) => reviewersUserIds.includes(i.userId)).map((i) => i.telegramUsername);
+      const reviewersToNotify = users
+        .filter((i) => reviewersUserIds.includes(i.userId))
+        .map((i) => i.telegramUsername)
+        .filter(Boolean);
       const hasReviewers = reviewersToNotify.length > 0;
       const isSingleReviewer = reviewersToNotify.length === 1;
 
       return hasReviewers
-        ? `${reviewersToNotify.join(', ')} для ${isSingleReviewer ? 'тебя' : 'вас'} новое ревью: ${reviewUrl}`
+        ? `${reviewersToNotify.join(', ')}, для ${isSingleReviewer ? 'тебя' : 'вас'} новое ревью: ${reviewUrl}`
         : '';
     });
   }
@@ -23,21 +27,22 @@ class MessageService {
    * @param {reviews: ReviewDTO[], users: UserDTO[]}
    * @returns {string[]}
    */
+  // TODO: rename
   buildOutdatedReviewsMsg({ reviews, users }) {
-    return reviews
-      .map((review) => {
-        const authorUserId = ReviewsService.getReviewAuthorUserId(review);
-        const reviewUrl = ReviewsService.getReviewUrl(review);
-        const userToNotify = users.find((i) => i.userId === authorUserId);
+    return reviews.map((review) => {
+      const authorUserIds = ReviewsService.getReviewAuthorsUserIds(review);
+      const reviewUrl = ReviewsService.getReviewUrl(review);
+      const authorsToNotify = users
+        .filter((i) => authorUserIds.includes(i.userId))
+        .map((i) => i.telegramUsername)
+        .filter(Boolean);
+      const hasAuthors = authorsToNotify.length > 0;
+      const isSingleAuthor = authorsToNotify.length === 1;
 
-        if (!userToNotify || !userToNotify.telegramUsername) {
-          return null;
-        }
-        const telegramUserToNotify = userToNotify.telegramUsername;
-
-        return `${telegramUserToNotify}, твое ревью протухает: ${reviewUrl}`;
-      })
-      .filter(Boolean);
+      return hasAuthors
+        ? `${authorsToNotify.join(', ')}, ${isSingleAuthor ? 'твое' : 'ваше'} ревью протухает: ${reviewUrl}`
+        : '';
+    });
   }
 }
 
