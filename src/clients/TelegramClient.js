@@ -54,6 +54,11 @@ class TelegramClient {
     }
   }
 
+  async getLastMessages() {
+    const updates = await this._getUpdates();
+    return updates.map((i) => i.message.text).filter(Boolean);
+  }
+
   /**
    * Returns new chats where start command where processed. To see Chat contract, check out:
    * https://core.telegram.org/bots/api#chat

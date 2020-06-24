@@ -11,6 +11,7 @@ class ReviewTaskScheduler {
     this._checkOutdatedReviews = this._checkOutdatedReviews.bind(this);
     this._checkOpenedReviews = this._checkOpenedReviews.bind(this);
     this._notifyAboutOutdatedReviews = this._notifyAboutOutdatedReviews.bind(this);
+    this._filterOutMentionedReviews = this._filterOutMentionedReviews.bind(this);
   }
 
   scheduleOutdatedReviewsCheck() {
@@ -45,8 +46,10 @@ class ReviewTaskScheduler {
 
     await ReviewsDBClient.insertNewOpenedReviews(newOpenedReviews);
     await ReviewsDBClient.removeObsoleteReviews(obsoleteReviews);
+    const lastMessages = await TelegramClient.getLastMessages();
+    const notMentionedNewOpenedReviews = this._filterOutMentionedReviews(newOpenedReviews, lastMessages);
 
-    const newReviewsMessages = MessageService.buildNewReviewsMessages({ reviews: newOpenedReviews, users });
+    const newReviewsMessages = MessageService.buildNewReviewsMessages({ reviews: notMentionedNewOpenedReviews, users });
     await TelegramClient.sendMessages(newReviewsMessages);
   }
 
@@ -66,6 +69,14 @@ class ReviewTaskScheduler {
 
     const messages = MessageService.buildOutdatedReviewsMessages({ reviews, users });
     TelegramClient.sendMessages(messages);
+  }
+
+  _filterOutMentionedReviews(reviews, lastMessages) {
+    return reviews.filter((i) => {
+      const reviewId = i.reviewId.reviewId;
+
+      return reviewId && !lastMessages.some((text) => text.toLowerCase().includes(reviewId.toLowerCase()));
+    });
   }
 }
 
