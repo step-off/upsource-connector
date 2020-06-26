@@ -69,7 +69,8 @@ class TelegramClient {
   _getNewChatsToNotify(updates = []) {
     return updates
       .map((i) => {
-        const isStartCommand = i.message.text === this.startCommand;
+        const messageText = i.message ? i.message.text : '';
+        const isStartCommand = messageText === this.startCommand;
         return isStartCommand ? i.message.chat : null;
       })
       .filter(Boolean);
