@@ -74,8 +74,15 @@ class ReviewTaskScheduler {
   _filterOutMentionedReviews(reviews, lastMessages) {
     return reviews.filter((i) => {
       const reviewId = i.reviewId.reviewId;
+      const reviewWasMentioned = lastMessages.some(
+        (text) => reviewId && text.toLowerCase().includes(reviewId.toLowerCase())
+      );
 
-      return reviewId && !lastMessages.some((text) => text.toLowerCase().includes(reviewId.toLowerCase()));
+      if (reviewWasMentioned) {
+        Logger.log(`Skip review ${reviewId} as it was mentioned`);
+      }
+
+      return !reviewWasMentioned;
     });
   }
 }
