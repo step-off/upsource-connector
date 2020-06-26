@@ -56,7 +56,7 @@ class TelegramClient {
 
   async getLastMessages() {
     const updates = await this._getUpdates();
-    return updates.map((i) => i.message.text).filter(Boolean);
+    return updates.map((i) => (i.message ? i.message.text : '')).filter(Boolean);
   }
 
   /**
