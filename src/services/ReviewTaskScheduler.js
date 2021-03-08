@@ -19,6 +19,7 @@ class ReviewTaskScheduler {
     Scheduler.scheduleJob({
       cronTime: process.env.OUTDATED_REVIEWS_CRONTIME,
       onTick: this._checkOutdatedReviews,
+      skipOnHoliday: true,
     });
   }
 
@@ -27,6 +28,7 @@ class ReviewTaskScheduler {
     Scheduler.scheduleJob({
       cronTime: process.env.OPENED_REVIEWS_CRONTIME,
       onTick: this._checkOpenedReviews,
+      skipOnHoliday: true,
     });
   }
 
@@ -65,7 +67,7 @@ class ReviewTaskScheduler {
 
   _notifyAboutOutdatedReviews(reviews, users) {
     Logger.log('is about to notify about outdated reviews: ');
-    Logger.log(JSON.stringify(reviews));
+    Logger.log(JSON.stringify(reviews.map((i) => i.reviewId.reviewId)));
 
     const messages = MessageService.buildOutdatedReviewsMessages({ reviews, users });
     TelegramClient.sendMessages(messages);
