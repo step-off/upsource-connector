@@ -34,7 +34,7 @@ class Scheduler {
         Logger.log('Current day is holiday. Skip job.');
         return;
       }
-      originalHandler();
+      return originalHandler();
     }
     originalHandler();
   }
